@@ -1,12 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination, Autoplay, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import {
+  EffectCoverflow,
+  Pagination,
+  Autoplay,
+  Navigation,
+} from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const TopDecorators = () => {
   const [decorators, setDecorators] = useState([]);
@@ -18,7 +23,7 @@ const TopDecorators = () => {
   useEffect(() => {
     const fetchDecorators = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/decorators");
+        const { data } = await axios.get('http://localhost:3000/decorators');
         setDecorators(data.slice(0, 6)); // প্রথম 6 decorators দেখাবে
         setLoading(false);
       } catch (err) {
@@ -43,7 +48,7 @@ const TopDecorators = () => {
       </h2>
 
       <Swiper
-        effect={"coverflow"}
+        effect={'coverflow'}
         grabCursor={true}
         loop={true}
         centeredSlides={true}
