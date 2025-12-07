@@ -4,6 +4,7 @@ import ServicesSection from './ServicesSection';
 import TopDecorators from './TopDecorators';
 import ServiceCoverageMap from './ServiceCoverageMap';
 import HowItWorks from './HowItWorks';
+import FeaturedProjects from './FeaturedProjects';
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <TopDecorators/>
       <ServiceCoverageMap/>
       <HowItWorks/>
+      <FeaturedProjects/>
     </div>
   );
 };

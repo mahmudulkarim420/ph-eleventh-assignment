@@ -17,7 +17,7 @@ const HowItWorks = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
         {steps.map((step, idx) => (
           <div key={idx} className="bg-gray-700 p-6 rounded-2xl text-center hover:shadow-xl transition duration-300">
-            <div className="text-blue-500 w-12 mx-auto mb-4">{step.icon}</div>
+            <div className="text-blue-700 w-8 mx-auto mb-4">{step.icon}</div>
             <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
             <p className="text-gray-300">{step.desc}</p>
           </div>
