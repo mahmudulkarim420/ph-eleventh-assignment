@@ -10,7 +10,7 @@ const ServicesSection = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/services");
+        const { data } = await axios.get("http://localhost:3000/services");
         setServices(data);
         setLoading(false);
       } catch (err) {
@@ -30,47 +30,52 @@ const ServicesSection = () => {
     return <p className="text-center mt-20 text-lg font-medium text-red-500">{error}</p>;
 
   return (
-    <section className="py-20 px-6 md:px-20 bg-gray-50">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-gray-800">
-        Our Services
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {services.map((service) => (
-          <div
-            key={service._id} // MongoDB automatically _id field দিবে
-            className="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300"
-          >
-            <img
-              src={service.image}
-              alt={service.title}
-              className="w-full h-60 object-cover"
-            />
-            <div className="p-6">
-              <h3 className="text-2xl font-semibold mb-3 text-gray-900">
-                {service.title}
-              </h3>
-              <p className="text-gray-600 mb-4">{service.description}</p>
-              {service.features && (
-                <ul className="list-disc list-inside text-gray-500 mb-4">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx}>{feature}</li>
-                  ))}
-                </ul>
-              )}
-              <div className="flex flex-col gap-2 text-gray-700 font-medium">
-                {service.priceRange && <span>Price: {service.priceRange}</span>}
-                {service.duration && <span>Duration: {service.duration}</span>}
-                {service.rating && (
-                  <span>
-                    Rating: {service.rating} ⭐ ({service.reviewsCount} reviews)
-                  </span>
-                )}
-              </div>
-            </div>
+  <section className="py-20 px-6 md:px-5  text-gray-200">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
+    Our <span className="text-blue-500">Services</span>
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+    {services.slice(0, 6).map(( service) => (
+      <div
+        key={service._id}
+        className="bg-gray-800/60 border border-gray-700 backdrop-blur-xl
+        rounded-3xl shadow-xl overflow-hidden hover:shadow-blue-700/30 hover:-translate-y-2 
+        transition-all duration-300"
+      >
+        <img
+          src={service.image}
+          alt={service.title}
+          className="w-full h-60 object-cover opacity-90 hover:opacity-100 transition duration-300"
+        />
+
+        <div className="p-6">
+          <h3 className="text-2xl font-semibold mb-3 text-white">
+            {service.title}
+          </h3>
+
+          <p className="text-gray-300 mb-4">{service.description}</p>
+
+          <div className="flex flex-col gap-2 font-medium mt-3">
+            {service.priceRange && (
+              <span className="text-blue-400">Price: {service.priceRange}</span>
+            )}
+            {service.duration && (
+              <span className="text-purple-400">Duration: {service.duration}</span>
+            )}
+            {service.rating && (
+              <span className="text-yellow-400">
+                Rating: {service.rating} ⭐ ({service.reviewsCount} reviews)
+              </span>
+            )}
           </div>
-        ))}
+        </div>
       </div>
-    </section>
+    ))}
+  </div>
+</section>
+
+
   );
 };
 
