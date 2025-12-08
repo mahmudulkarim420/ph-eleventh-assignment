@@ -5,6 +5,7 @@ import TopDecorators from './TopDecorators';
 import ServiceCoverageMap from './ServiceCoverageMap';
 import HowItWorks from './HowItWorks';
 import FeaturedProjects from './FeaturedProjects';
+import WhatWeOffer from './WhatWeOffer';
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
       <ServiceCoverageMap/>
       <HowItWorks/>
       <FeaturedProjects/>
+      <WhatWeOffer/>
     </div>
   );
 };
