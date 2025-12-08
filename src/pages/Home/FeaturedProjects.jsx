@@ -3,10 +3,10 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const projects = [
-  { title: "Luxury Wedding Decor", img: "https://source.unsplash.com/400x300/?wedding" },
-  { title: "Modern Home Interior", img: "https://source.unsplash.com/400x300/?home" },
-  { title: "Corporate Office Setup", img: "https://source.unsplash.com/400x300/?office" },
-  { title: "Event Lighting Design", img: "https://source.unsplash.com/400x300/?lighting" },
+  { title: "Luxury Wedding Decor", img: "https://i.ibb.co.com/tMnfvSM1/0402e03ab283f85e59b9c975cac4b4bf.jpg" },
+  { title: "Modern Home Interior", img: "https://i.ibb.co.com/Q7SDdNLL/f8fae0359ec8774acf6c3da3fc068171.jpg" },
+  { title: "Corporate Office Setup", img: "https://i.ibb.co.com/zh1Jzprg/5f18e71664f3bf22da65e1c79cfb9a01.jpg" },
+  { title: "Event Lighting Design", img: "https://i.ibb.co.com/1GYRnDsm/37c625c8a1a09d739e4c3288ed54341a.jpg" },
 ];
 
 const FeaturedProjects = () => {
