@@ -1,15 +1,15 @@
-import { createContext, useEffect, useState } from "react";
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
+import { createContext, useEffect, useState } from 'react';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-} from "firebase/auth";
-import app from "../firebase/firebase.config";
+} from 'firebase/auth';
+import app from '../firebase/firebase.config';
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
   // Logout
   const logOut = () => {
     setLoading(true);
-    localStorage.removeItem("access-token");
+    localStorage.removeItem('access-token');
     return signOut(auth);
   };
 
@@ -53,24 +53,32 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      
-      if (currentUser?.email) {
-        const res = await fetch("http://localhost:5000/jwt", {   // ⬅ server URL later replace
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email }),
-        });
 
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem("access-token", data.token);
+      if (currentUser?.email) {
+        try {
+          const res = await fetch('http://localhost:3000/jwt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: currentUser.email }),
+          });
+
+          if (!res.ok) throw new Error('Network response was not ok');
+
+          const data = await res.json();
+          if (data.token) {
+            localStorage.setItem('access-token', data.token);
+          }
+        } catch (error) {
+          console.error('Failed to fetch JWT:', error);
+          localStorage.removeItem('access-token');
         }
       } else {
-        localStorage.removeItem("access-token");
+        localStorage.removeItem('access-token');
       }
 
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -85,9 +93,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

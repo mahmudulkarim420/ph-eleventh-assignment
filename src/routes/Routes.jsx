@@ -14,7 +14,9 @@ import ErrorPage from '../components/Shared/Error/ErrorPage.jsx';
 
 
 // Protected Route
-import PrivateRoute from './PrivateRoute.jsx';
+import PrivateRoute from '../routes/PrivateRoute.jsx';
+import DashBoardLayout from '../layouts/DashBoardLayout.jsx';
+import MyBookings from '../pages/Dashboard/MyBookings/MyBookings.jsx';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -29,6 +31,20 @@ export const router = createBrowserRouter([
     ],
   },
 
+  {
+     path: "/dashboard",
+  Component: PrivateRoute,
+  children: [
+    {
+      index: true,
+      Component: DashBoardLayout, // default dashboard page
+    },
+    {
+      path: "my-bookings",
+      Component: MyBookings,
+    },
+    ]
+  },
  
   // Catch All
   {

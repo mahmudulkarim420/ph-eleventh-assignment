@@ -32,15 +32,15 @@ const ServicesSection = () => {
   return (
   <section className="py-20 px-6 md:px-5  text-gray-200">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
-    Our <span className="text-blue-500">Services</span>
+    Our <span className="text-[#F9BC60]">Services</span>
   </h2>
 
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
     {services.slice(0, 6).map(( service) => (
       <div
         key={service._id}
-        className="bg-gray-800/60 border border-gray-700 backdrop-blur-xl
-        rounded-3xl shadow-xl overflow-hidden hover:shadow-blue-700/30 hover:-translate-y-2 
+        className="bg-[#F9BC60] border border-gray-700 backdrop-blur-xl
+        rounded-3xl shadow-xl overflow-hidden hover:shadow-yellow-700/30 hover:-translate-y-2 
         transition-all duration-300"
       >
         <img
@@ -50,22 +50,22 @@ const ServicesSection = () => {
         />
 
         <div className="p-6">
-          <h3 className="text-2xl font-semibold mb-3 text-white">
+          <h3 className="text-2xl font-semibold mb-3 text-[#004643]">
             {service.title}
           </h3>
 
-          <p className="text-gray-300 mb-4">{service.description}</p>
+          <p className="text-gray-600 mb-4">{service.description}</p>
 
           <div className="flex flex-col gap-2 font-medium mt-3">
             {service.priceRange && (
-              <span className="text-blue-400">Price: {service.priceRange}</span>
+              <span className="text-[#004643]">Price: {service.priceRange}</span>
             )}
             {service.duration && (
-              <span className="text-purple-400">Duration: {service.duration}</span>
+              <span className="text-[#004643]">Duration: {service.duration}</span>
             )}
             {service.rating && (
-              <span className="text-yellow-400">
-                Rating: {service.rating} ⭐ ({service.reviewsCount} reviews)
+              <span className="text-[#004643]">
+                Rating: {service.rating} ⭐
               </span>
             )}
           </div>

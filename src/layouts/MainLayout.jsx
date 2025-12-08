@@ -4,7 +4,7 @@ import Footer from '../components/Shared/Footer/Footer';
 
 const MainLayout = () => {
   return (
-    <div className="max-w-7xl mx-auto flex flex-col min-h-screen bg-gradient-to-br from-[#0a0f1f] via-[#0c162c] to-[#091124] text-white">
+    <div className="max-w-7xl mx-auto flex flex-col min-h-screen bg-[#004643] text-white">
       <Navbar />
       <main className='flex-1'>
         <Outlet />

@@ -14,12 +14,12 @@ const Register = () => {
 
     const form = e.target;
     const name = form.name.value;
-    const photoFile = form.photo.files[0]; // image file
+    const photoFile = form.photo.files[0];
     const email = form.email.value;
     const password = form.password.value;
 
     try {
-      // 1️⃣ Upload to imgbb
+      // 1️⃣ upload image to imgbb
       const formData = new FormData();
       formData.append("image", photoFile);
 
@@ -27,17 +27,17 @@ const Register = () => {
         `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_YOUR_IMGBB_API_KEY}`,
         { method: "POST", body: formData }
       );
-      const imgData = await uploadRes.json();
 
+      const imgData = await uploadRes.json();
       if (!imgData.success) {
         toast.error("Image upload failed!");
         return;
       }
 
-      const photoURL = imgData.data.url;  // uploaded photo url
+      const photoURL = imgData.data.url;
 
-      // 2️⃣ Register user in Firebase
-      const result = await registerUser(email, password);
+      // 2️⃣ Register user
+      await registerUser(email, password);
 
       // 3️⃣ Update profile
       await updateUserProfile(name, photoURL);
@@ -65,9 +65,10 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-white px-4">
-      <div className="bg-[#0c1326] p-8 rounded-xl w-full max-w-md shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+    <div className="min-h-screen flex items-center justify-center px-4 text-white">
+      <div className="bg-[#073b37]/40 backdrop-blur-lg p-8 rounded-2xl w-full max-w-md border border-[#F9BC60]/20 shadow-xl">
+
+        <h2 className="text-3xl font-bold text-center mb-6">Create Account</h2>
 
         <form onSubmit={handleRegister} className="space-y-4">
 
@@ -76,7 +77,7 @@ const Register = () => {
             name="name"
             placeholder="Full Name"
             required
-            className="w-full p-3 rounded bg-[#0a0d1a] border border-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-white focus:ring-2 focus:ring-[#F9BC60] outline-none transition"
           />
 
           <input
@@ -84,7 +85,7 @@ const Register = () => {
             name="photo"
             accept="image/*"
             required
-            className="w-full p-3 rounded bg-[#0a0d1a] border border-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-gray-300 cursor-pointer"
           />
 
           <input
@@ -92,7 +93,7 @@ const Register = () => {
             name="email"
             placeholder="Email"
             required
-            className="w-full p-3 rounded bg-[#0a0d1a] border border-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-white focus:ring-2 focus:ring-[#F9BC60] outline-none transition"
           />
 
           <input
@@ -100,31 +101,35 @@ const Register = () => {
             name="password"
             placeholder="Password"
             required
-            className="w-full p-3 rounded bg-[#0a0d1a] border border-gray-700 text-white"
+            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-white focus:ring-2 focus:ring-[#F9BC60] outline-none transition"
           />
 
           <button
             type="submit"
-            className="w-full bg-primary hover:bg-blue-700 transition py-3 rounded font-semibold"
+            className="w-full bg-[#F9BC60] hover:bg-[#e3a14d] text-[#004643] transition py-3 rounded-lg font-semibold text-lg duration-300 shadow-md hover:scale-[1.02]"
           >
-            {loading ? "Loading..." : "Register"}
+            {loading ? "Creating..." : "Register"}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <button
-            onClick={handleGoogleLogin}
-            className="btn w-full py-6 bg-white text-black border-[#e5e5e5]"
-          >
-            Login with Google
-          </button>
-        </div>
+        <button
+          onClick={handleGoogleLogin}
+          className="mt-5 flex items-center justify-center gap-3 w-full py-3 bg-white text-black font-semibold rounded-lg duration-300 hover:bg-gray-200"
+        >
+          <img
+            src="https://www.svgrepo.com/show/355037/google.svg"
+            alt="google"
+            className="w-5"
+          />
+          Continue with Google
+        </button>
 
-        <p className="mt-4 text-center text-gray-400">
+        <p className="mt-5 text-center text-gray-300">
           Already have an account?{" "}
-          <Link to="/login" className="text-primary">Login</Link>
+          <Link to="/login" className="text-[#F9BC60] font-medium hover:underline">
+            Login Now
+          </Link>
         </p>
-
       </div>
     </div>
   );

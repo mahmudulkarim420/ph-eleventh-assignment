@@ -1,29 +1,84 @@
 import { Link, NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthProvider.jsx";
-import { Menu } from "lucide-react"; // icon
+import { Menu } from "lucide-react";
 
 const Navbar = () => {
-  const { user, logOut } = useContext(AuthContext); // auth setup later
+  const { user, logOut } = useContext(AuthContext);
 
   const navLinks = (
     <>
-      <li><NavLink to="/" className="hover:text-primary">Home</NavLink></li>
-      <li><NavLink to="/services" className="hover:text-primary">Services</NavLink></li>
-      <li><NavLink to="/about" className="hover:text-primary">About</NavLink></li>
-      <li><NavLink to="/contact" className="hover:text-primary">Contact</NavLink></li>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `px-2 pb-1 transition font-medium ${
+              isActive
+                ? "text-white border-b-2 border-white"
+                : "text-[#004643] hover:text-white"
+            }`
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/services"
+          className={({ isActive }) =>
+            `px-2 pb-1 transition font-medium ${
+              isActive
+                ? "text-white border-b-2 border-white"
+                : "text-[#004643] hover:text-white"
+            }`
+          }
+        >
+          Services
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            `px-2 pb-1 transition font-medium ${
+              isActive
+                ? "text-white border-b-2 border-white"
+                : "text-[#004643] hover:text-white"
+            }`
+          }
+        >
+          About
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            `px-2 pb-1 transition font-medium ${
+              isActive
+                ? "text-white border-b-2 border-[#004643]"
+                : "text-[#004643] hover:text-white"
+            }`
+          }
+        >
+          Contact
+        </NavLink>
+      </li>
     </>
   );
 
   return (
-    <div className="navbar backdrop-blur-md bg-white/5 border-b border-white/10 text-white shadow-md sticky top-0 z-50">
+    <div className="navbar backdrop-blur-md bg-[#F9BC60] border-b border-white/10 text-white shadow-md sticky top-0 z-50">
       <div className="navbar-start">
-        <Link to="/" className="text-2xl font-bold text-primary">StyleDecor</Link>
+        <Link to="/" className="text-2xl font-bold text-[#004643]">StyleDecor</Link>
       </div>
 
       {/* Desktop Menu */}
       <div className="navbar-center hidden md:flex">
-        <ul className="menu menu-horizontal gap-6 font-medium">
+        <ul className=" menu-horizontal gap-6">
           {navLinks}
         </ul>
       </div>
@@ -40,7 +95,7 @@ const Navbar = () => {
             </ul>
           </div>
         ) : (
-          <Link to="/login" className="btn btn-primary btn-sm px-5">Login</Link>
+          <Link to="/login" className="btn bg-[#004643] text-[#F9BC60] btn-sm px-5">Login</Link>
         )}
 
         {/* Mobile Menu */}

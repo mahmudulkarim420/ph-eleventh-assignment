@@ -53,8 +53,8 @@ const ServiceCoverageMap = () => {
 
   return (
     <section className="py-20 px-6 md:px-5 text-white">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-blue-500">
-        Service <span className="text-white">Coverage Map</span>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
+        Service <span className="text-[#F9BC60]">Coverage Map</span>
       </h2>
 
       {/* Search Box */}
@@ -70,7 +70,7 @@ const ServiceCoverageMap = () => {
           />
           <CiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-xl" />
           <button
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full transition"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#F9BC60] hover:bg-yellow-600 text-white px-5 py-2 rounded-full transition"
             onClick={handleSearch}
           >
             Search

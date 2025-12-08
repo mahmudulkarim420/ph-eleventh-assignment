@@ -44,7 +44,7 @@ const TopDecorators = () => {
   return (
     <section className="py-20 px-6 md:px-5">
       <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
-        Top <span className="text-blue-500">Decorators</span>
+        Top <span className="text-[#F9BC60]">Decorators</span>
       </h2>
 
       <Swiper
@@ -111,7 +111,7 @@ const TopDecorators = () => {
         </button>
         <button
           ref={nextRef}
-          className="bg-blue-500 ml-5 text-white w-10 h-10 rounded-full flex items-center justify-center transition"
+          className="bg-[#F9BC60] ml-5 text-white w-10 h-10 rounded-full flex items-center justify-center transition"
         >
           <FaArrowRight />
         </button>
