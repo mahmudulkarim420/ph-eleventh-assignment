@@ -5,6 +5,7 @@ import L from "leaflet";
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import { CiSearch } from "react-icons/ci";
+import { motion } from "framer-motion";
 
 // Custom icon for decorators
 const decoratorIcon = new L.Icon({
@@ -34,7 +35,6 @@ const ServiceCoverageMap = () => {
     fetchCoverage();
   }, []);
 
-  // Search function
   const handleSearch = () => {
     if (searchTerm.trim() === "") {
       setFilteredLocations(locations);
@@ -52,13 +52,28 @@ const ServiceCoverageMap = () => {
     return <p className="text-center mt-20 text-lg font-medium text-white">Loading map...</p>;
 
   return (
-    <section className="py-20 px-6 md:px-5 text-white">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
+    <motion.section
+      className="py-20 px-6 md:px-5 text-white"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      <motion.h2
+        className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
         Service <span className="text-[#F9BC60]">Coverage Map</span>
-      </h2>
+      </motion.h2>
 
       {/* Search Box */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-10 justify-center">
+      <motion.div
+        className="flex flex-col sm:flex-row gap-4 mb-10 justify-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
         <div className="relative flex-1 max-w-md mx-auto">
           <input
             type="text"
@@ -76,10 +91,15 @@ const ServiceCoverageMap = () => {
             Search
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Map */}
-      <div className="w-full h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+      <motion.div
+        className="w-full h-[600px] rounded-2xl overflow-hidden shadow-2xl"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      >
         <MapContainer
           center={[23.685, 90.3563]}
           zoom={8}
@@ -104,8 +124,8 @@ const ServiceCoverageMap = () => {
             </Marker>
           ))}
         </MapContainer>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };
 

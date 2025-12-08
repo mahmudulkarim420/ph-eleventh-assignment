@@ -59,7 +59,7 @@ const Navbar = () => {
           className={({ isActive }) =>
             `px-2 pb-1 transition font-medium ${
               isActive
-                ? "text-white border-b-2 border-[#004643]"
+                ? "text-white border-b-2 border-white"
                 : "text-[#004643] hover:text-white"
             }`
           }

@@ -17,6 +17,9 @@ import ErrorPage from '../components/Shared/Error/ErrorPage.jsx';
 import PrivateRoute from '../routes/PrivateRoute.jsx';
 import DashBoardLayout from '../layouts/DashBoardLayout.jsx';
 import MyBookings from '../pages/Dashboard/MyBookings/MyBookings.jsx';
+import Services from '../pages/Services/Services.jsx';
+import About from '../pages/About/About.jsx';
+import Contact from '../pages/Contact/Contact.jsx';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -28,6 +31,9 @@ export const router = createBrowserRouter([
       { path: "/", index: true, Component: Home },
       { path: "/register", Component: Register },
       { path: "/login", Component: Login },
+      {path: "services", Component: Services},
+      {path: "about", Component: About},
+      {path: "contact", Component: Contact},
     ],
   },
 

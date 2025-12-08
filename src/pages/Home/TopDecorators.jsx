@@ -1,3 +1,4 @@
+// TopDecorators.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,6 +13,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const TopDecorators = () => {
   const [decorators, setDecorators] = useState([]);
@@ -24,7 +26,7 @@ const TopDecorators = () => {
     const fetchDecorators = async () => {
       try {
         const { data } = await axios.get('http://localhost:3000/decorators');
-        setDecorators(data.slice(0, 6)); // প্রথম 6 decorators দেখাবে
+        setDecorators(data.slice(0, 6));
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -83,9 +85,15 @@ const TopDecorators = () => {
         modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
         className="mySwiper"
       >
-        {decorators.map((d) => (
+        {decorators.map((d, index) => (
           <SwiperSlide key={d._id}>
-            <div className="bg-gray-200 rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              className="bg-gray-200 rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition duration-300"
+            >
               <img
                 src={d.photoURL}
                 alt={d.name}
@@ -96,7 +104,7 @@ const TopDecorators = () => {
               <p className="text-yellow-500">
                 {d.rating} ⭐ ({d.reviewsCount})
               </p>
-            </div>
+            </motion.div>
           </SwiperSlide>
         ))}
       </Swiper>

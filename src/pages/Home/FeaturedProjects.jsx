@@ -1,5 +1,6 @@
 // FeaturedProjects.jsx
 import React from "react";
+import { motion } from "framer-motion";
 
 const projects = [
   { title: "Luxury Wedding Decor", img: "https://source.unsplash.com/400x300/?wedding" },
@@ -11,17 +12,32 @@ const projects = [
 const FeaturedProjects = () => {
   return (
     <section className="py-20 px-6 md:px-5 text-white">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-white">
+      <motion.h2
+        className="text-4xl md:text-5xl font-extrabold text-center mb-16"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         Featured <span className="text-[#F9BC60]">Projects</span>
-      </h2>
+      </motion.h2>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {projects.map((project, idx) => (
-          <div key={idx} className="rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
+          <motion.div
+            key={idx}
+            className="rounded-2xl overflow-hidden shadow-lg cursor-pointer"
+            whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(0,0,0,0.3)" }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: idx * 0.2 }}
+          >
             <img src={project.img} alt={project.title} className="w-full h-48 object-cover" />
             <div className="p-4 bg-[#F9BC60]">
-              <h3 className="text-lg font-semibold">{project.title}</h3>
+              <h3 className="text-lg font-semibold text-[#004643]">{project.title}</h3>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
