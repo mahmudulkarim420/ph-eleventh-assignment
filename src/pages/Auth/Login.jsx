@@ -2,93 +2,131 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthProvider';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import loginImg from '../../assets/login.jfif';
 
 const Login = () => {
   const { loginUser, googleLogin } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  // Email + Password Login
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-    loginUser(email, password)
-      .then(() => {
-        toast.success('Login Successful!');
-        navigate('/dashboard');
-      })
-      .catch((err) => toast.error(err.message))
-      .finally(() => setLoading(false));
+    try {
+      await loginUser(email, password);
+      toast.success("Login Successful!");
+      navigate("/");  // চাইলে /home করতেও পারো
+    } catch (err) {
+      console.log("Login Error:", err.code, err.message);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
+  // Google Login
+  const handleGoogleLogin = async () => {
     setLoading(true);
-    googleLogin()
-      .then(() => {
-        toast.success('Google login successful!');
-        navigate('/home');
-      })
-      .catch((err) => toast.error(err.message))
-      .finally(() => setLoading(false));
+    try {
+      await googleLogin();
+      toast.success("Google Login Successful!");
+      navigate("/");
+    } catch (err) {
+      console.log("Google Login Error:", err.message);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 ">
-      <div className="bg-[#073b37]/40 backdrop-blur-xl border border-[#F9BC60]/20 p-8 rounded-2xl w-full max-w-md shadow-2xl text-white">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex w-full max-w-3xl rounded-lg overflow-hidden shadow-xl">
 
-        <h2 className="text-3xl font-bold text-center mb-6">
-          Welcome Back 👋
-        </h2>
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-white focus:ring-2 focus:ring-[#F9BC60] outline-none transition"
+        {/* Left Image */}
+        <div className="hidden md:block md:w-1/2">
+          <img
+            src={loginImg}
+            alt="Login"
+            className="w-full h-[500px] object-cover"
           />
+        </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            className="w-full p-3 rounded-lg bg-[#002725] border border-[#F9BC60]/30 text-white focus:ring-2 focus:ring-[#F9BC60] outline-none transition"
-          />
+        {/* Right Form */}
+        <div className="w-full md:w-1/2 p-6 bg-[#e0eee6] flex flex-col justify-center">
 
-          <button
-            type="submit"
-            className="w-full bg-[#F9BC60] hover:bg-[#e3a14d] text-[#004643] transition py-3 rounded-lg font-semibold text-lg duration-300 shadow-md hover:scale-[1.02]"
-          >
-            {loading ? 'Loading...' : 'Login'}
-          </button>
-        </form>
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Welcome Back!</h2>
 
-        <div className="mt-5">
+          {/* Google Login */}
           <button
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center gap-3 w-full py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 duration-300"
+            disabled={loading}
+            className="flex items-center justify-center gap-2 w-full py-2 mb-4 bg-white border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-100 transition"
           >
             <img
               src="https://www.svgrepo.com/show/355037/google.svg"
+              className="w-5 h-5"
               alt="google"
-              className="w-5"
             />
             Continue with Google
           </button>
-        </div>
 
-        <p className="mt-5 text-center text-gray-300">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-[#F9BC60] font-medium hover:underline">
-            Register
-          </Link>
-        </p>
+          <div className="flex items-center my-3">
+            <hr className="flex-grow border-t border-gray-400" />
+            <span className="mx-2 text-gray-600 text-sm">OR</span>
+            <hr className="flex-grow border-t border-gray-400" />
+          </div>
+
+          {/* Email Login Form */}
+          <form onSubmit={handleLogin} className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                required
+                className="w-full p-2.5 border border-gray-300 rounded-md focus:border-[#56a877] outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+                className="w-full p-2.5 border border-gray-300 rounded-md focus:border-[#56a877] outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#004d40] hover:bg-[#00382e] text-white py-2.5 rounded-md font-semibold transition duration-200"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          <p className="mt-4 text-center text-gray-600 text-sm">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-[#004d40] font-bold hover:underline">
+              Register Here
+            </Link>
+          </p>
+
+        </div>
       </div>
     </div>
   );

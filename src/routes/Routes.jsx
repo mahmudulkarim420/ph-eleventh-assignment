@@ -20,6 +20,7 @@ import MyBookings from '../pages/Dashboard/MyBookings/MyBookings.jsx';
 import Services from '../pages/Services/Services.jsx';
 import About from '../pages/About/About.jsx';
 import Contact from '../pages/Contact/Contact.jsx';
+import ServiceDetails from '../pages/Services/ServiceDetails.jsx';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       { path: "/register", Component: Register },
       { path: "/login", Component: Login },
       {path: "services", Component: Services},
+      {path: "services/:id", Component: ServiceDetails},
       {path: "about", Component: About},
       {path: "contact", Component: Contact},
     ],
