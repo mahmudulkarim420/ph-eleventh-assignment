@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../../components/Shared/Navbar/Spinner/Spinner';
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -28,8 +29,8 @@ const Services = () => {
 
   if (loading)
     return (
-      <p className="text-center mt-20 text-lg font-medium text-white">
-        Loading services...
+      <p>
+        <Spinner/>
       </p>
     );
 

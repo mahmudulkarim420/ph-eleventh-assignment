@@ -19,57 +19,58 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Register
+  // ---------------- Register ----------------
   const registerUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // Login
+  // ---------------- Login ----------------
   const loginUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Google Login
+  // ---------------- Google Login ----------------
   const googleLogin = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // Update User Profile
+  // ---------------- Update Profile ----------------
   const updateUserProfile = (name, photoURL) => {
+    if (!auth.currentUser) return;
     return updateProfile(auth.currentUser, { displayName: name, photoURL });
   };
 
-  // Logout
+  // ---------------- Logout ----------------
   const logOut = () => {
     setLoading(true);
     localStorage.removeItem('access-token');
     return signOut(auth);
   };
 
-  // Observe User State + JWT
+  // ---------------- Observe User State + JWT ----------------
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (currentUser?.email) {
         try {
-          const res = await fetch('http://localhost:3000/jwt', {
+          const res = await fetch('http://localhost:5000/jwt', {  // Ensure backend port matches
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: currentUser.email }),
           });
 
-          if (!res.ok) throw new Error('Network response was not ok');
+          if (!res.ok) throw new Error('Failed to fetch JWT');
 
           const data = await res.json();
           if (data.token) {
             localStorage.setItem('access-token', data.token);
           }
         } catch (error) {
-          console.error('Failed to fetch JWT:', error);
+          console.error('JWT fetch error:', error);
           localStorage.removeItem('access-token');
         }
       } else {
@@ -93,7 +94,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
