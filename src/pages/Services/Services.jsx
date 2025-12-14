@@ -1,9 +1,9 @@
 // Services.jsx
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import Spinner from '../../components/Shared/Navbar/Spinner/Spinner';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+import Spinner from "../../components/Shared/Navbar/Spinner/Spinner";
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -14,12 +14,12 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/services');
+        const { data } = await axios.get("http://localhost:3000/services");
         setServices(data);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching services:', err);
-        setError('Failed to load services. Please try again later.');
+        console.error("Error fetching services:", err);
+        setError("Failed to load services. Please try again later.");
         setLoading(false);
       }
     };
@@ -30,16 +30,11 @@ const Services = () => {
   if (loading)
     return (
       <p>
-        <Spinner/>
+        <Spinner />
       </p>
     );
 
-  if (error)
-    return (
-      <p className="text-center mt-20 text-lg font-medium text-red-500">
-        {error}
-      </p>
-    );
+  if (error) return <p className="text-center mt-20 text-lg font-medium text-red-500">{error}</p>;
 
   return (
     <section className="py-20 px-6 md:px-5 text-gray-200">
@@ -66,27 +61,19 @@ const Services = () => {
             />
 
             <div className="p-6 flex flex-col flex-1">
-              <h3 className="text-2xl font-semibold mb-3 text-[#004643]">
-                {service.title}
-              </h3>
+              <h3 className="text-2xl font-semibold mb-3 text-[#004643]">{service.title}</h3>
 
               <p className="text-gray-600 mb-4">{service.description}</p>
 
               <div className="flex flex-col gap-2 font-medium ">
                 {service.priceRange && (
-                  <span className="text-[#004643]">
-                    Price: {service.priceRange}
-                  </span>
+                  <span className="text-[#004643]">Price: {service.priceRange}</span>
                 )}
                 {service.duration && (
-                  <span className="text-[#004643]">
-                    Duration: {service.duration}
-                  </span>
+                  <span className="text-[#004643]">Duration: {service.duration}</span>
                 )}
                 {service.rating && (
-                  <span className="text-[#004643]">
-                    Rating: {service.rating} ⭐
-                  </span>
+                  <span className="text-[#004643]">Rating: {service.rating} ⭐</span>
                 )}
               </div>
 

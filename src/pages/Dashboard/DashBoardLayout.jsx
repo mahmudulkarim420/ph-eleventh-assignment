@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router";
 
 const DashboardLayout = () => {
   return (
@@ -52,7 +52,7 @@ const DashboardLayout = () => {
             </li>
 
             <li>
-              <Link to="my-bookings" className="flex items-center gap-2">
+              <Link to="/dashboard/my-bookings" className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"

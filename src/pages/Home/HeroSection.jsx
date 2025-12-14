@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleCTA = () => {
-    if (user) navigate('/dashboard');
-    else navigate('/login');
+    if (user) navigate("/dashboard");
+    else navigate("/login");
   };
 
   // animation variants
@@ -38,9 +38,8 @@ const HeroSection = () => {
           transition={{ delay: 0.3 }}
           className="text-gray-300 text-lg md:text-2xl mb-8 max-w-3xl mx-auto"
         >
-          Premium interior solutions, easy project tracking, and smooth
-          role-based access — all in one platform to enhance your Home
-          Decoration experience.
+          Premium interior solutions, easy project tracking, and smooth role-based access — all in
+          one platform to enhance your Home Decoration experience.
         </motion.p>
 
         <motion.button
@@ -53,7 +52,7 @@ const HeroSection = () => {
         >
           <span className="absolute bg-[#004643] size-80 rounded-full group-hover:scale-150 scale-0 -z-10 -left-2 -top-10 group-hover:duration-500 duration-700 origin-center transform transition-all"></span>
           <span className="absolute bg-[#e0b14b] size-80 -left-2 -top-10 rounded-full group-hover:scale-150 scale-0 -z-10 group-hover:duration-700 duration-500 origin-center transform transition-all"></span>
-          {user ? 'Go to Dashboard' : 'Get Started'}
+          {user ? "Go to Dashboard" : "Get Started"}
         </motion.button>
       </div>
     </section>

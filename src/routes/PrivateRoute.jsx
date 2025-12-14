@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router";
 import { AuthContext } from "../context/AuthProvider"; // path adjust করো
 
-const PrivateRoute = () => {
+const PrivateRoute = ({children}) => {
   const { user, loading } = useContext(AuthContext);
 
   if (loading) {
@@ -14,7 +14,7 @@ const PrivateRoute = () => {
     );
   }
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  return user ? children : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

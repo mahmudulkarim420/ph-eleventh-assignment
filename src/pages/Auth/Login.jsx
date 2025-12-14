@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import loginImg from '../../assets/login.jfif';
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { useNavigate, Link } from "react-router";
+import { toast } from "react-hot-toast";
+import loginImg from "../../assets/login.jfif";
 
 const Login = () => {
   const { loginUser, googleLogin } = useContext(AuthContext);
@@ -20,7 +20,7 @@ const Login = () => {
     try {
       await loginUser(email, password);
       toast.success("Login Successful!");
-      navigate("/");  // চাইলে /home করতেও পারো
+      navigate("/"); // চাইলে /home করতেও পারো
     } catch (err) {
       console.log("Login Error:", err.code, err.message);
       toast.error(err.message);
@@ -47,19 +47,13 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="flex w-full max-w-3xl rounded-lg overflow-hidden shadow-xl">
-
         {/* Left Image */}
         <div className="hidden md:block md:w-1/2">
-          <img
-            src={loginImg}
-            alt="Login"
-            className="w-full h-[500px] object-cover"
-          />
+          <img src={loginImg} alt="Login" className="w-full h-[500px] object-cover" />
         </div>
 
         {/* Right Form */}
         <div className="w-full md:w-1/2 p-6 bg-[#e0eee6] flex flex-col justify-center">
-
           <h2 className="text-xl font-semibold mb-4 text-gray-700">Welcome Back!</h2>
 
           {/* Google Login */}
@@ -85,9 +79,7 @@ const Login = () => {
           {/* Email Login Form */}
           <form onSubmit={handleLogin} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 name="email"
@@ -98,9 +90,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <input
                 type="password"
                 name="password"
@@ -125,7 +115,6 @@ const Login = () => {
               Register Here
             </Link>
           </p>
-
         </div>
       </div>
     </div>

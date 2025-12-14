@@ -1,6 +1,6 @@
 // ServiceDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 
 const ServiceDetails = () => {
@@ -23,15 +23,12 @@ const ServiceDetails = () => {
     fetchService();
   }, [id]);
 
-  if (loading)
-    return <p className="text-center mt-20 text-lg text-white">Loading...</p>;
-  if (!service)
-    return <p className="text-center mt-20 text-lg text-red-500">Service not found</p>;
+  if (loading) return <p className="text-center mt-20 text-lg text-white">Loading...</p>;
+  if (!service) return <p className="text-center mt-20 text-lg text-red-500">Service not found</p>;
 
   return (
     <section className="py-20 px-6 text-white">
       <div className="max-w-6xl mx-auto bg-[#F9BC60] rounded-2xl p-6 flex flex-col lg:flex-row gap-8 items-center">
-        
         {/* Image */}
         <div className="flex-1">
           <img
@@ -49,18 +46,37 @@ const ServiceDetails = () => {
           <div className="mb-4">
             <h3 className="text-2xl font-semibold mb-2 text-[#004643]">Features:</h3>
             <ul className="list-disc list-inside text-gray-800">
-              {service.features && service.features.map((feature, idx) => (
-                <li key={idx}>{feature}</li>
-              ))}
+              {service.features &&
+                service.features.map((feature, idx) => <li key={idx}>{feature}</li>)}
             </ul>
           </div>
 
           <div className="flex flex-col gap-2 text-gray-800 font-medium mb-6">
-            {service.priceRange && <span><strong>Price:</strong> {service.priceRange}</span>}
-            {service.duration && <span><strong>Duration:</strong> {service.duration}</span>}
-            {service.rating && <span><strong>Rating:</strong> {service.rating} ⭐ ({service.reviewsCount} reviews)</span>}
-            {service.category && <span><strong>Category:</strong> {service.category}</span>}
-            {service.highlight !== undefined && <span><strong>Highlight:</strong> {service.highlight ? "Yes" : "No"}</span>}
+            {service.priceRange && (
+              <span>
+                <strong>Price:</strong> {service.priceRange}
+              </span>
+            )}
+            {service.duration && (
+              <span>
+                <strong>Duration:</strong> {service.duration}
+              </span>
+            )}
+            {service.rating && (
+              <span>
+                <strong>Rating:</strong> {service.rating} ⭐ ({service.reviewsCount} reviews)
+              </span>
+            )}
+            {service.category && (
+              <span>
+                <strong>Category:</strong> {service.category}
+              </span>
+            )}
+            {service.highlight !== undefined && (
+              <span>
+                <strong>Highlight:</strong> {service.highlight ? "Yes" : "No"}
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -1,12 +1,11 @@
-import { useContext, useState } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import registerImg from '../../assets/register.jfif';
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { useNavigate, Link } from "react-router";
+import { toast } from "react-hot-toast";
+import registerImg from "../../assets/register.jfif";
 
 const Register = () => {
-  const { registerUser, updateUserProfile, googleLogin } =
-    useContext(AuthContext);
+  const { registerUser, updateUserProfile, googleLogin } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -16,6 +15,7 @@ const Register = () => {
 
     const form = e.target;
     const name = form.name.value;
+    const role = form.role.value;
     const photoFile = form.photo.files[0];
     const email = form.email.value;
     const password = form.password.value;
@@ -23,19 +23,17 @@ const Register = () => {
     try {
       // 1️⃣ upload image to imgbb
       const formData = new FormData();
-      formData.append('image', photoFile);
+      formData.append("image", photoFile);
 
       // NOTE: Ensure VITE_YOUR_IMGBB_API_KEY is correctly configured
       const uploadRes = await fetch(
-        `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_YOUR_IMGBB_API_KEY
-        }`,
-        { method: 'POST', body: formData }
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_YOUR_IMGBB_API_KEY}`,
+        { method: "POST", body: formData }
       );
 
       const imgData = await uploadRes.json();
       if (!imgData.success) {
-        toast.error('Image upload failed!');
+        toast.error("Image upload failed!");
         setLoading(false);
         return;
       }
@@ -47,10 +45,22 @@ const Register = () => {
 
       // 3️⃣ Update profile
       await updateUserProfile(name, photoURL);
-      toast.success('Profile Updated!');
+      toast.success("Profile Updated!");
 
-      toast.success('Registration Successful!');
-      navigate('/');
+      // 4️⃣ Save user to backend with role
+      try {
+        const user = { name, email, photoURL, role };
+        await fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user),
+        });
+      } catch (saveErr) {
+        console.error("Failed to save user:", saveErr);
+      }
+
+      toast.success("Registration Successful!");
+      navigate("/");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -61,9 +71,28 @@ const Register = () => {
   const handleGoogleLogin = () => {
     setLoading(true);
     googleLogin()
-      .then(() => {
-        toast.success('Google login successful!');
-        navigate('/');
+      .then(async (loggedUser) => {
+        // loggedUser is the firebase user object returned from AuthProvider.googleLogin
+        const u = loggedUser;
+        // save to backend with default role 'user'
+        try {
+          const user = {
+            name: u.displayName || "",
+            email: u.email,
+            photoURL: u.photoURL || "",
+            role: "user",
+          };
+          await fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+          });
+        } catch (err) {
+          console.error("Save google user failed", err);
+        }
+
+        toast.success("Google login successful!");
+        navigate("/");
       })
       .catch((err) => toast.error(err.message))
       .finally(() => setLoading(false));
@@ -75,18 +104,12 @@ const Register = () => {
       <div className="flex w-full max-w-3xl rounded-lg overflow-hidden shadow-xl">
         {/* Left Image */}
         <div className="hidden md:block md:w-1/2">
-          <img
-            src={registerImg}
-            alt="food image"
-            className="w-full h-[610px] object-cover"
-          />
+          <img src={registerImg} alt="food image" className="w-full h-[610px] object-cover" />
         </div>
 
         {/* Form side */}
         <div className="w-full md:w-1/2 p-6 bg-[#e0eee6] flex flex-col justify-center">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">
-            Create Account
-          </h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Create Account</h2>
 
           {/* Google Login */}
           <button
@@ -94,10 +117,7 @@ const Register = () => {
             className="flex items-center justify-center gap-2 w-full py-2 mb-4 bg-white border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-100 transition"
             disabled={loading}
           >
-            <img
-              src="https://www.svgrepo.com/show/355037/google.svg"
-              className="w-5 h-5"
-            />
+            <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" />
             Continue with Google
           </button>
 
@@ -111,9 +131,18 @@ const Register = () => {
           {/* Form */}
           <form onSubmit={handleRegister} className="space-y-3">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
-                Full Name
-              </label>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Role</label>
+              <select
+                name="role"
+                defaultValue="user"
+                className="w-full p-2.5 border border-gray-300 rounded-md bg-white text-gray-700"
+              >
+                <option value="user">User</option>
+                <option value="decorator">Decorator</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Full Name</label>
               <input
                 type="text"
                 name="name"
@@ -125,9 +154,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
-                Profile Photo
-              </label>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Profile Photo</label>
               <input
                 type="file"
                 name="photo"
@@ -140,9 +167,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
-                Email Address
-              </label>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -154,9 +179,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
-                Password
-              </label>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Password</label>
               <input
                 type="password"
                 name="password"
@@ -173,16 +196,13 @@ const Register = () => {
               className="w-full bg-[#004d40] hover:bg-[#00382e] text-white py-2.5 rounded-md 
             font-semibold text-base mt-4 transition duration-300"
             >
-              {loading ? 'Creating...' : 'Register'}
+              {loading ? "Creating..." : "Register"}
             </button>
           </form>
 
           <p className="mt-4 text-center text-gray-600 text-sm">
             Already have an account?
-            <Link
-              to="/login"
-              className="text-[#004d40] font-bold hover:underline ml-1"
-            >
+            <Link to="/login" className="text-[#004d40] font-bold hover:underline ml-1">
               Login Now
             </Link>
           </p>
