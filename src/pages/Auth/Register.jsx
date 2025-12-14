@@ -15,17 +15,15 @@ const Register = () => {
 
     const form = e.target;
     const name = form.name.value;
-    const role = form.role.value;
     const photoFile = form.photo.files[0];
     const email = form.email.value;
     const password = form.password.value;
 
     try {
-      // 1️⃣ upload image to imgbb
+      // 1️⃣ Upload image to imgbb
       const formData = new FormData();
       formData.append("image", photoFile);
 
-      // NOTE: Ensure VITE_YOUR_IMGBB_API_KEY is correctly configured
       const uploadRes = await fetch(
         `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_YOUR_IMGBB_API_KEY}`,
         { method: "POST", body: formData }
@@ -40,16 +38,16 @@ const Register = () => {
 
       const photoURL = imgData.data.url;
 
-      // 2️⃣ Register user
+      // 2️⃣ Register user in Firebase
       await registerUser(email, password);
 
-      // 3️⃣ Update profile
+      // 3️⃣ Update Firebase profile
       await updateUserProfile(name, photoURL);
       toast.success("Profile Updated!");
 
-      // 4️⃣ Save user to backend with role
+      // 4️⃣ Save user to backend with default role 'user'
       try {
-        const user = { name, email, photoURL, role };
+        const user = { name, email, photoURL, role: "user" };
         await fetch("http://localhost:3000/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -72,9 +70,7 @@ const Register = () => {
     setLoading(true);
     googleLogin()
       .then(async (loggedUser) => {
-        // loggedUser is the firebase user object returned from AuthProvider.googleLogin
         const u = loggedUser;
-        // save to backend with default role 'user'
         try {
           const user = {
             name: u.displayName || "",
@@ -100,11 +96,10 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      {/* Card container (Size reduced) */}
       <div className="flex w-full max-w-3xl rounded-lg overflow-hidden shadow-xl">
         {/* Left Image */}
         <div className="hidden md:block md:w-1/2">
-          <img src={registerImg} alt="food image" className="w-full h-[610px] object-cover" />
+          <img src={registerImg} alt="register" className="w-full h-[610px] object-cover" />
         </div>
 
         {/* Form side */}
@@ -121,26 +116,13 @@ const Register = () => {
             Continue with Google
           </button>
 
-          {/* Divider */}
           <div className="flex items-center my-3">
             <hr className="flex-grow border-gray-400" />
             <span className="mx-2 text-gray-600 text-sm">OR</span>
             <hr className="flex-grow border-gray-400" />
           </div>
 
-          {/* Form */}
           <form onSubmit={handleRegister} className="space-y-3">
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Role</label>
-              <select
-                name="role"
-                defaultValue="user"
-                className="w-full p-2.5 border border-gray-300 rounded-md bg-white text-gray-700"
-              >
-                <option value="user">User</option>
-                <option value="decorator">Decorator</option>
-              </select>
-            </div>
             <div>
               <label className="text-sm font-medium text-gray-700 mb-1 block">Full Name</label>
               <input
@@ -149,7 +131,7 @@ const Register = () => {
                 placeholder="Enter Full Name"
                 required
                 className="w-full p-2.5 border border-gray-300 rounded-md bg-white text-gray-700 placeholder-gray-500 
-              focus:ring-[#56a877] focus:border-[#56a877] outline-none"
+                focus:ring-[#56a877] focus:border-[#56a877] outline-none"
               />
             </div>
 
@@ -161,8 +143,8 @@ const Register = () => {
                 accept="image/*"
                 required
                 className="w-full text-sm text-gray-900 
-              file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold 
-              file:bg-[#004d40] file:text-white hover:file:bg-[#00382e]"
+                file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold 
+                file:bg-[#004d40] file:text-white hover:file:bg-[#00382e]"
               />
             </div>
 
@@ -174,7 +156,7 @@ const Register = () => {
                 placeholder="Enter Email"
                 required
                 className="w-full p-2.5 border border-gray-300 rounded-md bg-white text-gray-700 placeholder-gray-500 
-              focus:ring-[#56a877] focus:border-[#56a877] outline-none"
+                focus:ring-[#56a877] focus:border-[#56a877] outline-none"
               />
             </div>
 
@@ -186,7 +168,7 @@ const Register = () => {
                 placeholder="Enter Password"
                 required
                 className="w-full p-2.5 border border-gray-300 rounded-md bg-white text-gray-700 placeholder-gray-500 
-              focus:ring-[#56a877] focus:border-[#56a877] outline-none"
+                focus:ring-[#56a877] focus:border-[#56a877] outline-none"
               />
             </div>
 
@@ -194,7 +176,7 @@ const Register = () => {
               type="submit"
               disabled={loading}
               className="w-full bg-[#004d40] hover:bg-[#00382e] text-white py-2.5 rounded-md 
-            font-semibold text-base mt-4 transition duration-300"
+                font-semibold text-base mt-4 transition duration-300"
             >
               {loading ? "Creating..." : "Register"}
             </button>

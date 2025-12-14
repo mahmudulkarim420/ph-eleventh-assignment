@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
-import Spinner from "../../components/Shared/Navbar/Spinner/Spinner";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Services = () => {
   const [services, setServices] = useState([]);

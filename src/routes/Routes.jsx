@@ -15,9 +15,14 @@ import About from "../pages/About/About.jsx";
 import Contact from "../pages/Contact/Contact.jsx";
 import ServiceDetails from "../pages/Services/ServiceDetails.jsx";
 
-// Protected Route
-import PrivateRoute from "../routes/PrivateRoute.jsx";
+// Dashboard
 import DashboardLayout from "../pages/Dashboard/DashBoardLayout.jsx";
+import AdminPanel from "../pages/Dashboard/Admin/AdminPanel.jsx";
+
+// Routes protection
+import PrivateRoute from "../routes/PrivateRoute.jsx";
+import RoleProtectedRoute from "../routes/RoleProtectedRoute.jsx";
+import Unauthorized from "../pages/Unauthorized.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -43,12 +48,18 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      { index: true, element: <div>Hello</div> },
+      { index: true, element: <div>Welcome to Dashboard</div> },
       { path: "my-bookings", element: <MyBookings /> },
+
+      // ===== Admin panel route =====
+      {
+        element: <RoleProtectedRoute allowedRoles={["admin"]} />,
+        children: [{ path: "admin-panel", element: <AdminPanel /> }],
+      },
     ],
   },
-  {
-    path: "*",
-    element: <ErrorPage />,
-  },
+
+  { path: "/unauthorized", element: <Unauthorized /> },
+
+  { path: "*", element: <ErrorPage /> },
 ]);
