@@ -38,7 +38,7 @@ const DashboardLayout = () => {
         <div className="flex min-h-full flex-col items-start bg-[#F9BC60] w-64">
           <ul className="menu w-full grow text-[#004643] p-4">
             <li>
-              <Link to="/dashboard" className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"

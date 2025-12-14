@@ -1,13 +1,15 @@
-// ServiceDetails.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthProvider";
+import { toast } from "react-hot-toast";
 
 const ServiceDetails = () => {
   const { id } = useParams();
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -23,13 +25,82 @@ const ServiceDetails = () => {
     fetchService();
   }, [id]);
 
+  // Try to extract a numeric price from various service fields
+  const derivePrice = (svc) => {
+    if (!svc) return null;
+    const p = svc.price;
+    if (typeof p === "number" && !isNaN(p)) return p;
+    if (typeof p === "string") {
+      const m = p.match(/(\d+(?:[.,]\d+)?)/);
+      if (m) return Number(m[1].replace(/,/g, ""));
+    }
+    const pr = svc.priceRange || svc.price_range || svc.priceRangeString;
+    if (typeof pr === "string") {
+      const m = pr.match(/(\d+(?:[.,]\d+)?)/);
+      if (m) return Number(m[1].replace(/,/g, ""));
+    }
+    return null;
+  };
+
+  const handleBooking = async () => {
+    if (!service) return;
+
+    // Require authenticated user
+    if (!user || !user.email) {
+      toast.error("You must be logged in to book. Redirecting to login...");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("access-token");
+
+      // Build a clear payload the backend can validate easily
+      const numericPrice = derivePrice(service);
+      if (numericPrice === null) {
+        toast.error("Service price is missing or invalid. Please contact support.");
+        return;
+      }
+
+      const payload = {
+        serviceId: service._id ?? service.id ?? id,
+        title: service.title,
+        price: numericPrice,
+        email: user.email,
+      };
+
+      console.log("Creating checkout session with payload:", payload);
+
+      const res = await axios.post("http://localhost:3000/create-checkout-session", payload, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      console.log("Checkout session response:", res?.data);
+
+      const checkoutUrl = res?.data?.url;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        const serverMsg = res?.data?.message || JSON.stringify(res?.data);
+        console.error("No checkout URL returned from server", serverMsg);
+        toast.error("Payment could not be started: " + (res?.data?.message || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Checkout session error:", error?.response || error);
+      const serverErr = error?.response?.data || error.message || "Unknown error";
+      toast.error("Payment failed: " + (serverErr.message || JSON.stringify(serverErr)));
+    }
+  };
+
   if (loading) return <p className="text-center mt-20 text-lg text-white">Loading...</p>;
-  if (!service) return <p className="text-center mt-20 text-lg text-red-500">Service not found</p>;
+  if (!service) return <p className="text-center mt-20 text-red-500 text-lg">Service not found</p>;
 
   return (
     <section className="py-20 px-6 text-white">
       <div className="max-w-6xl mx-auto bg-[#F9BC60] rounded-2xl p-6 flex flex-col lg:flex-row gap-8 items-center">
-        {/* Image */}
         <div className="flex-1">
           <img
             src={service.image}
@@ -38,57 +109,40 @@ const ServiceDetails = () => {
           />
         </div>
 
-        {/* Text / Details */}
         <div className="flex-1">
           <h2 className="text-4xl font-bold mb-4 text-[#004643]">{service.title}</h2>
           <p className="text-gray-800 mb-4">{service.description}</p>
 
-          <div className="mb-4">
-            <h3 className="text-2xl font-semibold mb-2 text-[#004643]">Features:</h3>
-            <ul className="list-disc list-inside text-gray-800">
-              {service.features &&
-                service.features.map((feature, idx) => <li key={idx}>{feature}</li>)}
-            </ul>
-          </div>
+          <ul className="list-disc list-inside text-gray-800 mb-4">
+            {service.features?.map((f, i) => (
+              <li key={i}>{f}</li>
+            ))}
+          </ul>
 
-          <div className="flex flex-col gap-2 text-gray-800 font-medium mb-6">
-            {service.priceRange && (
-              <span>
-                <strong>Price:</strong> {service.priceRange}
-              </span>
-            )}
-            {service.duration && (
-              <span>
-                <strong>Duration:</strong> {service.duration}
-              </span>
-            )}
-            {service.rating && (
-              <span>
-                <strong>Rating:</strong> {service.rating} ⭐ ({service.reviewsCount} reviews)
-              </span>
-            )}
-            {service.category && (
-              <span>
-                <strong>Category:</strong> {service.category}
-              </span>
-            )}
-            {service.highlight !== undefined && (
-              <span>
-                <strong>Highlight:</strong> {service.highlight ? "Yes" : "No"}
-              </span>
-            )}
-          </div>
+          <p className="text-gray-800 mb-4">
+            <strong>Price:</strong>{" "}
+            {derivePrice(service) !== null
+              ? `$${derivePrice(service)}`
+              : service.priceRange ?? "Contact for price"}
+          </p>
+          <p className="text-gray-800 mb-4">
+            <strong>Duration:</strong> {service.duration}
+          </p>
+
+          <button
+            onClick={handleBooking}
+            className="w-full bg-[#004643] text-white py-4 rounded-xl text-lg font-semibold hover:bg-[#003530] transition"
+          >
+            Book Now
+          </button>
         </div>
       </div>
 
-      {/* Centered Go to Home Button */}
       <div className="flex justify-center mt-8">
         <button
           onClick={() => navigate("/")}
-          className="font-bold mt-4 rounded-md px-8 py-5 bg-gradient-to-r from-[#F9BC60] to-[#fac05e] text-[#004643] relative overflow-hidden group z-0 hover:text-white hover:from-[#fac05e] hover:to-[#e0a200] duration-1000"
+          className="font-bold mt-4 rounded-md px-8 py-5 bg-gradient-to-r from-[#F9BC60] to-[#fac05e] text-[#004643] hover:text-white transition"
         >
-          <span className="absolute bg-[#004643] size-80 rounded-full group-hover:scale-150 scale-0 -z-10 -left-2 -top-10 group-hover:duration-500 duration-700 origin-center transform transition-all"></span>
-          <span className="absolute bg-[#e0b14b] size-80 -left-2 -top-10 rounded-full group-hover:scale-150 scale-0 -z-10 group-hover:duration-700 duration-500 origin-center transform transition-all"></span>
           Go to Home
         </button>
       </div>
