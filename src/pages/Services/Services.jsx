@@ -14,7 +14,9 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/services");
+        const { data } = await axios.get(
+          "https://ph-eleventh-assignment-server.vercel.app/services"
+        );
         setServices(data);
         setLoading(false);
       } catch (err) {

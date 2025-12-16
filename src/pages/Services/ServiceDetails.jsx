@@ -14,7 +14,9 @@ const ServiceDetails = () => {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/services/${id}`);
+        const { data } = await axios.get(
+          `https://ph-eleventh-assignment-server.vercel.app/services/${id}`
+        );
         setService(data);
         setLoading(false);
       } catch (err) {
@@ -71,12 +73,16 @@ const ServiceDetails = () => {
 
       console.log("Creating checkout session with payload:", payload);
 
-      const res = await axios.post("http://localhost:3000/create-checkout-session", payload, {
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const res = await axios.post(
+        "https://ph-eleventh-assignment-server.vercel.app/create-checkout-session",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
 
       console.log("Checkout session response:", res?.data);
 

@@ -5,14 +5,14 @@ import { toast } from "react-hot-toast";
 
 // ===== Fetch all users =====
 const fetchUsers = async () => {
-  const res = await fetch("http://localhost:3000/users");
+  const res = await fetch("https://ph-eleventh-assignment-server.vercel.app//users");
   if (!res.ok) throw new Error("Failed to fetch users");
   return res.json();
 };
 
 // ===== Fetch backend user by email =====
 const fetchLoggedInUser = async (email) => {
-  const res = await fetch(`http://localhost:3000/users?email=${email}`);
+  const res = await fetch(`https://ph-eleventh-assignment-server.vercel.app//users?email=${email}`);
   if (!res.ok) throw new Error("Failed to fetch your profile");
   const data = await res.json();
   return data[0]; // backend user with role
@@ -20,11 +20,14 @@ const fetchLoggedInUser = async (email) => {
 
 // ===== Update user role =====
 const updateUserRole = async ({ id, newRole, adminEmail }) => {
-  const res = await fetch(`http://localhost:3000/users/${id}/role?adminEmail=${adminEmail}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ role: newRole }),
-  });
+  const res = await fetch(
+    `https://ph-eleventh-assignment-server.vercel.app/users/${id}/role?adminEmail=${adminEmail}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role: newRole }),
+    }
+  );
 
   if (!res.ok) {
     const errData = await res.json();
@@ -101,9 +104,15 @@ const AdminPanel = () => {
                     value={u.role}
                     onChange={(e) => handleRoleChange(u._id, e.target.value)}
                   >
-                    <option className="bg-black text-white" value="user">User</option>
-                    <option className="bg-black text-white" value="decorator">Decorator</option>
-                    <option className="bg-black text-white" value="admin">Admin</option>
+                    <option className="bg-black text-white" value="user">
+                      User
+                    </option>
+                    <option className="bg-black text-white" value="decorator">
+                      Decorator
+                    </option>
+                    <option className="bg-black text-white" value="admin">
+                      Admin
+                    </option>
                   </select>
                 )}
               </td>

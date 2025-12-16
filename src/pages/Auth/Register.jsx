@@ -48,7 +48,7 @@ const Register = () => {
       // 4️⃣ Save user to backend with default role 'user'
       try {
         const user = { name, email, photoURL, role: "user" };
-        await fetch("http://localhost:3000/users", {
+        await fetch("https://ph-eleventh-assignment-server.vercel.app/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user),
@@ -78,7 +78,7 @@ const Register = () => {
             photoURL: u.photoURL || "",
             role: "user",
           };
-          await fetch("http://localhost:3000/users", {
+          await fetch("https://ph-eleventh-assignment-server.vercel.app//users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user),

@@ -20,7 +20,9 @@ const MyBookings = () => {
       try {
         const token = localStorage.getItem("access-token");
         const res = await axios.get(
-          `http://localhost:3000/bookings/${encodeURIComponent(user.email)}`,
+          `https://ph-eleventh-assignment-server.vercel.app/bookings/${encodeURIComponent(
+            user.email
+          )}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -43,7 +45,7 @@ const MyBookings = () => {
 
     try {
       const token = localStorage.getItem("access-token");
-      await axios.delete(`http://localhost:3000/bookings/${id}`, {
+      await axios.delete(`https://ph-eleventh-assignment-server.vercel.app/bookings/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(bookings.filter((b) => b._id !== id));
@@ -59,15 +61,13 @@ const MyBookings = () => {
     try {
       const token = localStorage.getItem("access-token");
       const res = await axios.patch(
-        `http://localhost:3000/bookings/${id}`,
+        `https://ph-eleventh-assignment-server.vercel.app/bookings/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       // Update local state
-      setBookings(
-        bookings.map((b) => (b._id === id ? { ...b, status: res.data.status } : b))
-      );
+      setBookings(bookings.map((b) => (b._id === id ? { ...b, status: res.data.status } : b)));
       toast.success("Booking updated successfully.");
     } catch (error) {
       console.error("Error updating booking:", error?.response || error);

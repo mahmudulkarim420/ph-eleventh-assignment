@@ -1,19 +1,14 @@
 // TopDecorators.jsx
-import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import {
-  EffectCoverflow,
-  Pagination,
-  Autoplay,
-  Navigation,
-} from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination, Autoplay, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const TopDecorators = () => {
   const [decorators, setDecorators] = useState([]);
@@ -25,7 +20,9 @@ const TopDecorators = () => {
   useEffect(() => {
     const fetchDecorators = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/decorators');
+        const { data } = await axios.get(
+          "https://ph-eleventh-assignment-server.vercel.app/decorators"
+        );
         setDecorators(data.slice(0, 6));
         setLoading(false);
       } catch (err) {
@@ -37,11 +34,7 @@ const TopDecorators = () => {
   }, []);
 
   if (loading)
-    return (
-      <p className="text-center mt-20 text-lg font-medium">
-        Loading decorators...
-      </p>
-    );
+    return <p className="text-center mt-20 text-lg font-medium">Loading decorators...</p>;
 
   return (
     <section className="py-20 px-6 md:px-5">
@@ -50,7 +43,7 @@ const TopDecorators = () => {
       </h2>
 
       <Swiper
-        effect={'coverflow'}
+        effect={"coverflow"}
         grabCursor={true}
         loop={true}
         centeredSlides={true}

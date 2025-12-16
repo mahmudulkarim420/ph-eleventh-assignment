@@ -22,7 +22,9 @@ const ServiceCoverageMap = () => {
   useEffect(() => {
     const fetchCoverage = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/serviceCoverage");
+        const { data } = await axios.get(
+          "https://ph-eleventh-assignment-server.vercel.app/serviceCoverage"
+        );
         const activeLocations = data.filter((loc) => loc.status === "active");
         setLocations(activeLocations);
         setFilteredLocations(activeLocations);
@@ -39,10 +41,11 @@ const ServiceCoverageMap = () => {
     if (searchTerm.trim() === "") {
       setFilteredLocations(locations);
     } else {
-      const filtered = locations.filter((loc) =>
-        loc.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        loc.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        loc.region.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = locations.filter(
+        (loc) =>
+          loc.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          loc.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          loc.region.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredLocations(filtered);
     }
@@ -111,13 +114,11 @@ const ServiceCoverageMap = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {filteredLocations.map((loc, index) => (
-            <Marker
-              key={index}
-              position={[loc.latitude, loc.longitude]}
-              icon={decoratorIcon}
-            >
+            <Marker key={index} position={[loc.latitude, loc.longitude]} icon={decoratorIcon}>
               <Popup>
-                <strong>{loc.district}, {loc.city}</strong>
+                <strong>
+                  {loc.district}, {loc.city}
+                </strong>
                 <br />
                 Covered Areas: {loc.covered_area.join(", ")}
               </Popup>

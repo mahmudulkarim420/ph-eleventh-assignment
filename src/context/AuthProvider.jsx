@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,8 +8,8 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-} from 'firebase/auth';
-import app from '../firebase/firebase.config';
+} from "firebase/auth";
+import app from "../firebase/firebase.config";
 
 export const AuthContext = createContext(null);
 
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }) => {
   // ---------------- LOGOUT ----------------
   const logOut = () => {
     setLoading(true);
-    localStorage.removeItem('access-token');
+    localStorage.removeItem("access-token");
     return signOut(auth);
   };
 
@@ -81,25 +81,25 @@ const AuthProvider = ({ children }) => {
 
       if (currentUser?.email) {
         try {
-          const res = await fetch('http://localhost:3000/jwt', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const res = await fetch("https://ph-eleventh-assignment-server.vercel.app/jwt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: currentUser.email }),
           });
 
           const data = await res.json();
 
           if (data.token) {
-            localStorage.setItem('access-token', data.token);
+            localStorage.setItem("access-token", data.token);
           } else {
-            localStorage.removeItem('access-token');
+            localStorage.removeItem("access-token");
           }
         } catch (error) {
-          console.error('JWT fetch error:', error);
-          localStorage.removeItem('access-token');
+          console.error("JWT fetch error:", error);
+          localStorage.removeItem("access-token");
         }
       } else {
-        localStorage.removeItem('access-token');
+        localStorage.removeItem("access-token");
       }
 
       setLoading(false);
@@ -119,11 +119,7 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
   };
 
-  return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
